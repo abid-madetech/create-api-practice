@@ -1,9 +1,9 @@
 import pytest
-from app import create_app
+import json
+from app import app
 
 @pytest.fixture
 def client():
-    app = create_app()
     app.config["TESTING"] = True
     with app.test_client() as client:
         yield client
@@ -12,8 +12,9 @@ def test_request_example(client):
     response = client.get("/")
     assert response.status_code == 200
 
-def test_get_courses(client):
+def test_test(client):
     response = client.get("/courses")
     assert response.status_code == 200
+    json_data = json.loads(response.data)
+    assert json_data["women_in_tech"]["location"] == "Manchester"
 
-    
