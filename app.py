@@ -1,15 +1,23 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 import json
+from tests import courses
 
 app = Flask(__name__)
 
-with open("tests/courses.json", "r") as courses:
-    courses_json = json.load(courses)
+# with open("tests/courses.json", "r") as courses:
+    # courses_json = json.load(courses)
 
-@app.route("/")
+courses = courses.courses
+@app.get("/")
 def hello_world():
     return "<h1>hello world<h1/>"
 
-@app.route("/courses")
+@app.get("/courses")
 def hello_courses():
-    return courses_json
+    return jsonify(courses), 200
+
+@app.post("/courses")
+def add_course():
+    data = request.json
+    courses.append(data)
+    return jsonify(data), 201
