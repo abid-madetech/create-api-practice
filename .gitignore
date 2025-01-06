@@ -1,5 +1,21 @@
-.venv/
-.pytest_cache/
+# Python
+*.pyc
 __pycache__/
-terraform/.terraform
-terraform/.terraform.lock.hcl
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+
+# Test results
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# IDE Configurations
+.idea/
+.vscode/
+
+# Environment files
+.env
