@@ -16,13 +16,15 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+      with:
+        region: eu-west-2 # Specify your AWS region
 
     - name: Build and Push Docker Image
       run: |
         IMAGE_TAG=latest
         docker build -t my-python-app .
-        docker tag my-python-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/my-python-app:$IMAGE_TAG
-        docker push <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/my-python-app:$IMAGE_TAG
+        docker tag my-python-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
+        docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
 
     - name: Deploy with Terraform
       run: |
