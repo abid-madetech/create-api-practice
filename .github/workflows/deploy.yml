@@ -23,8 +23,8 @@ jobs:
       run: |
         IMAGE_TAG=latest
         docker build -t my-python-app .
-        docker tag my-python-app:latest <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
-        docker push <AWS_ACCOUNT_ID>.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
+        docker tag my-python-app:latest 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
+        docker push 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
 
     - name: Deploy with Terraform
       run: |
