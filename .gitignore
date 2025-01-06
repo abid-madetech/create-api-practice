@@ -6,6 +6,7 @@ __pycache__/
 terraform/.terraform/
 terraform/*.tfstate
 terraform/*.tfstate.backup
+terraform/.terraform.lock.hcl
 
 # Test results
 .pytest_cache/
@@ -19,3 +20,5 @@ htmlcov/
 
 # Environment files
 .env
+
+.venv/
