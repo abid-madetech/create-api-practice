@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env: # Set environment variables globally
+    env:
       AWS_REGION: eu-west-2
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -23,14 +23,21 @@ jobs:
       uses: aws-actions/amazon-ecr-login@v1
 
     - name: Build and Push Docker Image
+      env:
+        AWS_REGION: ${{ env.AWS_REGION }}
       run: |
         IMAGE_TAG=latest
+        echo "Building Docker image..."
         docker build -t my-python-app .
+        echo "Tagging Docker image..."
         docker tag my-python-app:latest 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
+        echo "Pushing Docker image to ECR..."
         docker push 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
 
     - name: Deploy with Terraform
+      working-directory: terraform
       run: |
-        cd terraform
+        echo "Initializing Terraform..."
         terraform init
+        echo "Applying Terraform configuration..."
         terraform apply -auto-approve
