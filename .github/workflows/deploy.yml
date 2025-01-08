@@ -12,8 +12,6 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_STEP_DEBUG: true
 
     steps:
     - name: Checkout Code
@@ -23,13 +21,12 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::261219435789:role/github-actions-role
+        role-session-name: GitHub_to_AWS_via_FederatedOIDC
         aws-region: eu-west-2
 
-    - name: Verify AWS Caller Identity
-      run: aws sts get-caller-identity
-
-    - name: Log in to Amazon ECR
-      run: aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 261219435789.dkr.ecr.eu-west-2.amazonaws.com
+    - name: Login to Amazon ECR
+      run: |
+        aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 261219435789.dkr.ecr.eu-west-2.amazonaws.com
 
     - name: Build and Push Docker Image
       run: |
@@ -38,8 +35,9 @@ jobs:
         docker tag my-python-app:latest 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
         docker push 261219435789.dkr.ecr.eu-west-2.amazonaws.com/my-python-app:$IMAGE_TAG
 
-    - name: Deploy ECS Service
+    - name: Update ECS Service
       run: |
-        cd terraform
-        terraform init
-        terraform apply -auto-approve
+        aws ecs update-service \
+          --cluster my-ecs-cluster \
+          --service my-python-app-service \
+          --force-new-deployment
