@@ -50,7 +50,7 @@ jobs:
       run: zip -r deploy.zip .
 
     - name: Deploy to Elastic Beanstalk
-      uses: einaregilsson/beanstalk-deploy@v20
+      uses: einaregilsson/beanstalk-deploy@v22
       with:
         application_name: MyPythonApp
         environment_name: MyPythonApp-env
