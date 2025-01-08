@@ -50,7 +50,6 @@ resource "aws_iam_policy" "ecr_access_policy" {
   })
 }
 
-
 resource "aws_iam_role_policy_attachment" "ecr_access_policy_attachment" {
   role       = aws_iam_role.github_actions_role.name
   policy_arn = aws_iam_policy.ecr_access_policy.arn
@@ -109,4 +108,25 @@ resource "aws_iam_role_policy_attachment" "github_actions_ec2_policy_attachment"
   policy_arn = aws_iam_policy.github_actions_ec2_policy.arn
 }
 
+resource "aws_iam_policy" "github_actions_ecs_policy" {
+  name = "GitHubActionsECSPolicy"
 
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecs:UpdateService",
+          "ecs:DescribeServices"
+        ],
+        Resource = "arn:aws:ecs:eu-west-2:261219435789:service/my-ecs-cluster/my-python-app-service"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_ecs_policy_attachment" {
+  role       = aws_iam_role.github_actions_role.name
+  policy_arn = aws_iam_policy.github_actions_ecs_policy.arn
+}
