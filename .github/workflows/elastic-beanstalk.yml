@@ -13,7 +13,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      ACTIONS_STEP_DEBUG: true
+      ACTIONS_STEP_DEBUG: true  # Enable debug logs for troubleshooting
 
     steps:
     - name: Checkout Code
@@ -28,13 +28,6 @@ jobs:
 
     - name: Verify AWS Caller Identity
       run: aws sts get-caller-identity
-
-    - name: Export AWS Credentials
-      run: |
-        echo "AWS_ACCESS_KEY_ID=${{ steps.configure-aws-credentials.outputs.access-key-id }}" >> $GITHUB_ENV
-        echo "AWS_SECRET_ACCESS_KEY=${{ steps.configure-aws-credentials.outputs.secret-access-key }}" >> $GITHUB_ENV
-        echo "AWS_SESSION_TOKEN=${{ steps.configure-aws-credentials.outputs.session-token }}" >> $GITHUB_ENV
-      id: export-aws-creds
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -56,8 +49,3 @@ jobs:
         environment_name: MyPythonApp-env
         version_label: v-${{ github.run_number }}
         region: eu-west-2
-      env:
-        AWS_REGION: eu-west-2
-        AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-        # AWS_SESSION_TOKEN: ${{ env.AWS_SESSION_TOKEN }}
