@@ -67,7 +67,7 @@ resource "aws_iam_role" "github_actions_role" {
         Action = "sts:AssumeRoleWithWebIdentity",
         Condition = {
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:<GITHUB_ORG>/<REPO>:*"
+            "token.actions.githubusercontent.com:sub" = "repo:abid-madetech/create-api-practice:*"
           }
         }
       }
